@@ -5,6 +5,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
+import ServerAutoSuggest from './components/autosuggest_component/autosuggest_component'
 
 const Hello = props => (
   <div>Hello {props.name}!</div>
@@ -20,7 +21,7 @@ Hello.propTypes = {
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
-    <Hello name="React" />,
+    <ServerAutoSuggest />,
     document.body.appendChild(document.createElement('div')),
   )
 })
