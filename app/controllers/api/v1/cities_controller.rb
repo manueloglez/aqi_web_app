@@ -1,6 +1,6 @@
 class Api::V1::CitiesController < ApplicationController
     skip_before_action :verify_authenticity_token
-    
+
     def create
         city = City.new city_params
         if city.save
@@ -15,6 +15,11 @@ class Api::V1::CitiesController < ApplicationController
 
     def index
         cities = City.all
+        render json: cities
+    end
+
+    def search
+        cities = City.ransack(name_cont: params[:q]).result(distinct: true).limit(5)
         render json: cities
     end
 

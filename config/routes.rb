@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
+      get 'cities/search'
       get 'cities/index'
       post 'cities/create'
     end
