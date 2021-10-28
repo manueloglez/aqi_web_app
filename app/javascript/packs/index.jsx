@@ -4,24 +4,12 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import PropTypes from 'prop-types'
-import ServerAutoSuggest from './components/autosuggest_component/autosuggest_component'
+import App from './App'
 
-const Hello = props => (
-  <div>Hello {props.name}!</div>
-)
-
-Hello.defaultProps = {
-  name: 'David'
-}
-
-Hello.propTypes = {
-  name: PropTypes.string
-}
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
-    <ServerAutoSuggest />,
+    <App />,
     document.body.appendChild(document.createElement('div')),
   )
 })
