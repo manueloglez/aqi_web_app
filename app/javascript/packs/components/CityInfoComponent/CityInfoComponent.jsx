@@ -3,7 +3,8 @@ import {
   RadialBar,
   Legend,
   RadialBarChart,
-  Tooltip
+  Tooltip,
+  PolarAngleAxis
 } from 'recharts';
 
 const CityInfoComponent = (props) => {
@@ -12,28 +13,28 @@ const CityInfoComponent = (props) => {
     return 'red'
   }
 
-  const formatData = (waqiData) => {
-    return [{
-        name: 'no2',
-        value: waqiData.no2.v,
-        fill: calculateColor(waqiData.no2.v, [50,100,200,400])
-      }, {
-        name: 'pm10',
-        value: waqiData.pm10.v,
-        fill: calculateColor(waqiData.pm10.v, [25,50,90,180])
-      }, {
-        name: 'pm25',
-        value: waqiData.pm25.v,
-        fill: calculateColor(waqiData.pm25.v, [15,30,55,110])
-      }, {
-        name: 'o3',
-        value: waqiData.o3.v,
-        fill: calculateColor(waqiData.o3.v, [60,120,180,240])
-      },
-    ]
+  const segmentsObj = {
+    no2: [50,100,200,400],
+    pm10: [25,50,90,180],
+    pm25: [15,30,55,110],
+    o3: [60,120,180,240]
   }
-  const data = formatData(props.aqi.iaqi)
-  console.log(data)
+
+  const formatData = (waqiData, indexList) => {
+    let result = []
+    for (let index of indexList) {
+      if (waqiData[index]) {
+        result.push({
+          name: index,
+          value: waqiData[index].v,
+          pct: segmentsObj[index],
+          fill: calculateColor(waqiData[index].v, segmentsObj[index])
+        })
+      }
+    }
+    return result
+  }
+  const data = formatData(props.aqi.iaqi, ['o3', 'pm10', 'pm25', 'no2'])
 
   return(
     <div>
@@ -42,17 +43,21 @@ const CityInfoComponent = (props) => {
       <p>Longitude: {props.city.location[1]}</p>
       <p>Current AQI: {props.aqi.aqi}</p>
       <RadialBarChart 
-        width={730} 
-        height={250} 
-        innerRadius="10%" 
-        outerRadius="80%" 
-        data={data} 
-        startAngle={180} 
-        endAngle={0}
+      width={720} 
+      height={700} 
+      data={data}
+      innerRadius="10%" 
+      outerRadius="80%"
+      startAngle={180} 
+      endAngle={0}
       >
-        <RadialBar minAngle={15} label={{ fill: '#666', position: 'insideStart' }} background clockWise={true} dataKey='value' />
         <Legend iconSize={10} width={120} height={140} layout='vertical' verticalAlign='middle' align="right" />
-        <Tooltip />
+        {data.map((e, i) => {
+          return <PolarAngleAxis key={i} type="number" domain={[0, segmentsObj[e.name][3]]} angleAxisId={i} tick={false} />
+        })}
+        {data.map((e, i) => {
+          return <RadialBar minAngle={15} key={i+10} background dataKey="value" angleAxisId={i} data={[e]} />
+        })}
       </RadialBarChart>
     </div>
   )
