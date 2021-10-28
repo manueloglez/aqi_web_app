@@ -35,7 +35,6 @@ const CustomAutoSuggest = (props) => {
     const onSuggestionsFetchRequested = ({ value }) => {
         getSuggestions(value)
             .then(data => {
-                console.log(data)
                 if (data.Error) {
                     setSuggestions([])
                 } else {

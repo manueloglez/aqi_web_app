@@ -14,11 +14,6 @@ function App() {
     const location = cityInfo.location
     WAQI.geolocalized(location[0], location[1])
       .then(setAqi)
-      .then(() => {
-        console.log(city)
-        console.log(aqi)
-      })
-    
   }
 
 // https://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formula
@@ -43,10 +38,9 @@ const deg2rad = (deg) => {
   return (
     <>
       <CustomAutoSuggest onCitySelected={onCitySelected}/>
-      {city ? console.log(city, 'true') : console.log(city, 'false')}
       {city && aqi ? <> 
         <CityInfoComponent city={city} aqi={aqi.data}/> 
-        <AqiSummaryComponent aqi={aqi} city={city}/> 
+        <AqiSummaryComponent aqi={aqi.data} city={city}/> 
         </>
       : '' }
     </>
