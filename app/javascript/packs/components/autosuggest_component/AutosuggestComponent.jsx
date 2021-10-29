@@ -61,6 +61,8 @@ const CustomAutoSuggest = (props) => {
 
     // Adding AutoSuggest component
     return (
+        <>
+        <span>Search for a city</span>
         <Autosuggest
             suggestions={suggestions}
             onSuggestionsFetchRequested={onSuggestionsFetchRequested}
@@ -70,6 +72,8 @@ const CustomAutoSuggest = (props) => {
             renderSuggestion={renderSuggestion}
             inputProps={inputProps}
         />
+        </>
+
     );
 }
 

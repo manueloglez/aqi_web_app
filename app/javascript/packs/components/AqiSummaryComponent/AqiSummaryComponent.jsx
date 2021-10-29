@@ -58,9 +58,8 @@ const AqiSummaryComponent = (props) => {
   return(
     <>
     <h3>Individual AQI Index Forecast</h3>
+    <ResponsiveContainer width="100%" height={500}>
     <ComposedChart
-      width={730}
-      height={400}
       data={data[index]}
       margin={{
         top: 20, right: 20, bottom: 20, left: 20,
@@ -77,10 +76,11 @@ const AqiSummaryComponent = (props) => {
       <Line type="monotone" dataKey="index" stroke="blue" dot={false}/>
       <Tooltip />
     </ComposedChart>
+    </ResponsiveContainer>
     <div className="d-flex justify-content-center">
       {
         Object.keys(data).map((i) => {
-          return <button className={i === index ? 'btn btn-primary px-3' : 'btn btn-outline-primary mx-3'} onClick={() => setIndex(i)}>{indexNames[i]}</button>
+          return <button className={i === index ? 'btn btn-primary mx-3' : 'btn btn-outline-primary mx-3'} onClick={() => setIndex(i)}>{indexNames[i]}</button>
         })
       }
     </div>

@@ -55,6 +55,7 @@ const deg2rad = (deg) => {
           <button type="button" className="btn-close" onClick={() => setWarning(false)}></button>
         </div> : ''
       }
+      <h1 className="my-3">Air Quality Index Graphing</h1>
       <div className="row">
         <CustomAutoSuggest onCitySelected={onCitySelected}/>
       </div>
@@ -62,8 +63,6 @@ const deg2rad = (deg) => {
         <div className="row">
           <div className="col">
             <CityInfoComponent city={city} aqi={aqi.data}/> 
-          </div>
-          <div className="col">
             <AqiSummaryComponent aqi={aqi.data} city={city}/> 
           </div>
         </div>
