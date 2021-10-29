@@ -12,14 +12,14 @@ function App() {
 
   useEffect(() => {
     if (city && aqi) {
+      console.log(aqi.data)
       console.log(getDistanceFromLatLonInKm(...city.location, ...aqi.data.city.geo))
       if (getDistanceFromLatLonInKm(...city.location, ...aqi.data.city.geo) > 50) {
-        console.log('tests');
         setWarning(true)
       }
       console.log(city.location, aqi.data.city.geo)
     }
-  }, [city, aqi])
+  }, [aqi])
 
   const onCitySelected = (cityInfo) => {
     setCity(cityInfo)
