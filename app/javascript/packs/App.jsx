@@ -7,7 +7,7 @@ import CityInfoComponent from './components/CityInfoComponent/CityInfoComponent'
 
 function App() {
   let [ city, setCity ] = useState(null)
-  let [ aqi, setAqi ] = useState(null)
+  let [ aqi, setAqi ] = useState({data: null})
   let [ warning, setWarning ] = useState(false)
 
   useEffect(() => {
@@ -59,14 +59,12 @@ const deg2rad = (deg) => {
       <div className="row">
         <CustomAutoSuggest onCitySelected={onCitySelected}/>
       </div>
-      {city && aqi ? 
-        <div className="row">
-          <div className="col">
-            <CityInfoComponent city={city} aqi={aqi.data}/> 
-            <AqiSummaryComponent aqi={aqi.data} city={city}/> 
-          </div>
+      <div className="row">
+        <div className="col">
+          <CityInfoComponent city={city} aqi={aqi.data}/> 
+          <AqiSummaryComponent aqi={aqi.data}/> 
         </div>
-      : '' }
+      </div>
     </div>
   )
 }

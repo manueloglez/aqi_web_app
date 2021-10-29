@@ -1,78 +1,45 @@
 import React, { useState } from 'react';
-import Autosuggest from 'react-autosuggest';
+import { Typeahead, withAsync } from 'react-bootstrap-typeahead';
 import './autosuggest.css';
+const AsyncTypeahead = withAsync(Typeahead);
 
 const CustomAutoSuggest = (props) => {
-    const [ value, setValue ] = useState('')
     const [ suggestions, setSuggestions ] = useState([])
+    const [ isLoading, setIsLoading ] = useState(false);
 
-    // Filter logic
-    const getSuggestions = async (value) => {
-        const inputValue = value.trim().toLowerCase();
-        let response = await fetch(`api/v1/cities/search?q=${inputValue}`);
-        let data = await response.json()
-        return data;
-    };
 
-    // Trigger suggestions
-    const getSuggestionValue = suggestion => suggestion.name;
-
-    // Render Each Option
-    const renderSuggestion = suggestion => (
-        <span className="sugg-option">
-            <span className="name">
-                {suggestion.name}
-            </span>
-        </span>
-    );
-
-    // OnChange event handler
-    const onChange = (event, { newValue }) => {
-        setValue(newValue)
-    };
-
-    // Suggestion rerender when user types
-    const onSuggestionsFetchRequested = ({ value }) => {
-        getSuggestions(value)
-            .then(data => {
-                if (data.Error) {
-                    setSuggestions([])
-                } else {
-                    setSuggestions(data)
-                }
-            })
-    };
-
-    // Triggered on clear
-    const onSuggestionsClearRequested = () => {
-        setSuggestions([])
-    };
-
-    const onSuggestionSelected = async (event, {suggestion}) => {
-        props.onCitySelected(suggestion)
+    const handleSearch = (query) => {
+        setIsLoading(true);
+    
+        fetch(`api/v1/cities/search?q=${query}`)
+          .then((resp) => resp.json())
+          .then((items) => {
+            const options = items;
+    
+            setSuggestions(options);
+            setIsLoading(false);
+          });
+      };
+    
+    const onSuggestionSelected = (selected) => {
+        if (selected[0]) props.onCitySelected(selected[0])
     }
 
-    // Option props
-    const inputProps = {
-        placeholder: 'Type a city of the world',
-        value,
-        onChange: onChange
-    };
+    const filterBy = () => true;
 
-    // Adding AutoSuggest component
     return (
-        <>
-        <span>Search for a city</span>
-        <Autosuggest
-            suggestions={suggestions}
-            onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-            onSuggestionsClearRequested={onSuggestionsClearRequested}
-            onSuggestionSelected={onSuggestionSelected}
-            getSuggestionValue={getSuggestionValue}
-            renderSuggestion={renderSuggestion}
-            inputProps={inputProps}
+        <div className="d-flex w-100 mb-3">
+            <span>Search for a city</span>
+            <AsyncTypeahead className="w-100"
+            id="async-search"
+            filterBy={filterBy}
+            labelKey="name"
+            isLoading={isLoading}
+            onSearch={handleSearch}
+            options={suggestions}
+            onChange={onSuggestionSelected}
         />
-        </>
+        </div>
 
     );
 }

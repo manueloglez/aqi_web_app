@@ -48,7 +48,7 @@ const AqiSummaryComponent = (props) => {
   let data = {}
   let indexList = ['o3', 'pm10', 'pm25']
   for (let i of indexList) {
-    if (props.aqi.forecast.daily[i]) {
+    if (props.aqi && props.aqi.forecast.daily[i]) {
       data[i] = formatData(props.aqi, i)
     }
   }
@@ -77,7 +77,8 @@ const AqiSummaryComponent = (props) => {
       <Tooltip />
     </ComposedChart>
     </ResponsiveContainer>
-    <div className="d-flex justify-content-center">
+    <div className="d-flex justify-content-center align-items-center">
+      {props.api ? <span className="mx-3">Available indexes: </span> : ''}
       {
         Object.keys(data).map((i) => {
           return <button className={i === index ? 'btn btn-primary mx-3' : 'btn btn-outline-primary mx-3'} onClick={() => setIndex(i)}>{indexNames[i]}</button>
