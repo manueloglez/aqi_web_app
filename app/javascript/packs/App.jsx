@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { WAQI } from './requests'
 
 import CustomAutoSuggest from './components/autosuggest_component/AutosuggestComponent'
@@ -8,6 +8,18 @@ import CityInfoComponent from './components/CityInfoComponent/CityInfoComponent'
 function App() {
   let [ city, setCity ] = useState(null)
   let [ aqi, setAqi ] = useState(null)
+  let [ warning, setWarning ] = useState(false)
+
+  useEffect(() => {
+    if (city && aqi) {
+      console.log(getDistanceFromLatLonInKm(...city.location, ...aqi.data.city.geo))
+      if (getDistanceFromLatLonInKm(...city.location, ...aqi.data.city.geo) > 50) {
+        console.log('tests');
+        setWarning(true)
+      }
+      console.log(city.location, aqi.data.city.geo)
+    }
+  }, [city, aqi])
 
   const onCitySelected = (cityInfo) => {
     setCity(cityInfo)
@@ -36,14 +48,27 @@ const deg2rad = (deg) => {
 }
 
   return (
-    <>
-      <CustomAutoSuggest onCitySelected={onCitySelected}/>
-      {city && aqi ? <> 
-        <CityInfoComponent city={city} aqi={aqi.data}/> 
-        <AqiSummaryComponent aqi={aqi.data} city={city}/> 
-        </>
+    <div className="container">
+      { warning ? 
+        <div className="alert alert-warning alert-dismissible fade show">
+          <strong>Warning: </strong> The nearest station is more than 50km away from the city you are looking for. Data might not be accurate.
+          <button type="button" className="btn-close" onClick={() => setWarning(false)}></button>
+        </div> : ''
+      }
+      <div className="row">
+        <CustomAutoSuggest onCitySelected={onCitySelected}/>
+      </div>
+      {city && aqi ? 
+        <div className="row">
+          <div className="col">
+            <CityInfoComponent city={city} aqi={aqi.data}/> 
+          </div>
+          <div className="col">
+            <AqiSummaryComponent aqi={aqi.data} city={city}/> 
+          </div>
+        </div>
       : '' }
-    </>
+    </div>
   )
 }
 
