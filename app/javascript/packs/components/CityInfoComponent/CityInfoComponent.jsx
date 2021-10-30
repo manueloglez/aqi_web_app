@@ -26,11 +26,11 @@ const CityInfoComponent = ({city, aqi}) => {
         {city ? 
         <div className="card-body">
           <div className="row">
-            <div className="col-md-10 col-7 d-flex flex-column justify-content-center">
+            <div className="col-lg-10 col-sm-8 col-7 d-flex flex-column justify-content-center">
               <h3>{city.name}</h3>
               <h6 className="mb-2 text-muted">Location: {`${city.location[0]}, ${city.location[1]}`}</h6>
             </div>
-            <div className="col-md-2 col-5">
+            <div className="col-lg-2 col-sm-4 col-5">
             {aqi ? <div className="card" style={{backgroundColor: calculateColor(aqi.aqi)}}>
                 <div className="card-body d-flex flex-column align-items-center">
                   <p className="p-0">Current AQI:</p>
